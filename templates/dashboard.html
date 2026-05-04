@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Deployment Monitoring Board</title>
+
+    <!-- Auto refresh every 60 seconds -->
+    <meta http-equiv="refresh" content="60">
+
+    <!-- ✅ Bootstrap CSS (CORRECT) -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <style>
+        body {
+            background-color: #0b1c2d;
+            color: white;
+        }
+
+        h1 {
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        th {
+            background-color: #1f3b57 !important;
+            color: white !important;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 15px;
+        }
+
+        td {
+            vertical-align: middle;
+            font-size: 14px;
+        }
+
+        .badge-today {
+            background-color: #dc3545;
+            font-size: 14px;
+        }
+
+        .badge-d1 {
+            background-color: #ffc107;
+            color: black;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container-fluid mt-3">
+
+    <!-- ✅ Top Header Bar -->
+<div class="d-flex align-items-center mb-4">
+
+    <!-- Left spacer -->
+    <div style="width: 200px;"></div>
+
+    <!-- Center title -->
+    <div class="flex-grow-1 text-center">
+        <h1 class="mb-0">
+            DEPLOYMENT TRACKING
+        </h1>
+    </div>
+
+    <!-- Right logout -->
+    <div style="width: 200px;" class="text-end">
+            
+<a href="/logout" class="btn btn-outline-light">
+    🚪 Logout
+</a>
+
+    </div>
+
+</div>
+
+    <!-- ✅ Table -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-dark table-hover align-middle text-center">
+            <thead>
+                <tr>
+                    <th style="width:5%">No</th>
+                    <th style="width:15%">Request ID</th>
+                    <th style="width:30%">Request Description</th>
+                    <th style="width:10%">Executed By</th>
+                    <th style="width:10%">Execution Date</th>
+                    <th style="width:10%">Environment</th>
+                    <th style="width:10%">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            {% if systems %}
+                {% for row in systems %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ row["Request ID"] }}</td>
+                    <td class="text-start">
+                        {{ row["Request Description"] }}
+                    </td>
+                    <td>{{ row["Executed By"] }}</td>
+                    <td>
+                        {{ row["Execution Date/Time"].strftime("%d-%b-%Y") }}
+                    </td>
+                    <td>{{ row["Environment / Schema"] }}</td>
+                    <td>
+                        {% if row["DEPLOYMENT_FLAG"] == "TODAY" %}
+                            <span class="badge badge-today">TODAY</span>
+                        {% elif row["DEPLOYMENT_FLAG"] == "D-1" %}
+                            <span class="badge badge-d1">D‑1</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="7" class="text-warning">
+                        ✅ No TODAY or D‑1 deployments
+                    </td>
+                </tr>
+            {% endif %}
+
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ✅ Footer -->
+    <div class="text-center text-secondary mt-3">
+        <small>
+            Auto refresh every 60 seconds | IT Operations Monitoring
+        </small>
+    </div>
+
+</div>
+
+</body>
+</html>
